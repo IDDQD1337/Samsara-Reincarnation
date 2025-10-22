@@ -32,22 +32,25 @@ actor " Chaingun " : Weapon
 	Ready:
 		TNT1 A 0 A_TakeInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
 		TNT1 A 0 A_JumpIfInventory("DoomClassMode",2,"ReadyStr")
-		TNT1 A 0 A_JumpIfInventory("DoomClassMode",1,"Ready64")
-		DCHG A 1 A_WeaponReady(WRF_NOSECONDARY)
+		64CG A 0 A_JumpIfInventory("DoomClassMode",1,2)
+		DCHG A 0
+		"####" A 1 A_WeaponReady(WRF_NOSECONDARY)
 		loop
 
 	Deselect:
 		TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundStopper")
 		TNT1 A 0 A_JumpIfInventory("DoomClassMode",2,"DeselectStr")
-		TNT1 A 0 A_JumpIfInventory("DoomClassMode",1,"Deselect64")
-		DCHG A 1 A_Lower
+		64CG A 0 A_JumpIfInventory("DoomClassMode",1,2)
+		DCHG A 0
+		"####" A 1 A_Lower
 		goto Deselect
 
 	Select:
 		TNT1 A 0 A_TakeInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
 		TNT1 A 0 A_JumpIfInventory("DoomClassMode",2,"SelectStr")
-		TNT1 A 0 A_JumpIfInventory("DoomClassMode",1,"Select64")
-		DCHG A 1 A_Raise
+		64CG A 0 A_JumpIfInventory("DoomClassMode",1,2)
+		DCHG A 0
+		"####" A 1 A_Raise
 		loop
 
 	Fire:
@@ -138,18 +141,6 @@ actor " Chaingun " : Weapon
 		goto LightDone
 
 	// Doom 64 (fires slightly faster and has recoil visual)
-	Ready64:
-		64CG A 1 A_WeaponReady(WRF_NOSECONDARY)
-		goto Ready
-
-	Deselect64:
-		64CG A 1 A_Lower
-		goto Deselect
-
-	Select64:
-		64CG A 1 A_Raise
-		goto Select
-
 	Fire64:
 		TNT1 A 0 A_GunFlash("Flash64")
 		TNT1 A 0 A_JumpIfInventory("SamsaraUsingSmoothAnims",1,"Fire64Smooth")
@@ -164,7 +155,7 @@ actor " Chaingun " : Weapon
 	Fire64Vanilla2:
 		64CG C 3 offset(0, 33) A_GiveInventory("SamsaraDoomguy64ChaingunAttackHandler")
 		goto Fire64Finish
-		
+
 	Fire64Finish:
 		TNT1 A 0 A_ReFire("Fire64Vanilla3Attack")
 		goto Ready
@@ -180,7 +171,6 @@ actor " Chaingun " : Weapon
 	Fire64Vanilla4:
 		64CG C 3 offset(0, 33) A_GiveInventory("SamsaraDoomguy64ChaingunAttackHandler")
 		goto FireFinish
-
 
 	Fire64Smooth:
 		64CG A 2 offset(-2, 35) A_GiveInventory("SamsaraDoomguy64ChaingunAttackHandler")
@@ -266,7 +256,7 @@ actor " Chaingun " : Weapon
 		DCHG M 2 offset(0,32) Bright
 	FireStrFinish:
 		TNT1 A 0 A_ReFire
-        TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringEndSoundPlayer")
+		TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringEndSoundPlayer")
 		goto Ready
 
 	FireStrSmooth:
@@ -454,13 +444,13 @@ actor " Chaingun " : Weapon
 		TNT1 A 0 A_JumpIfInventory("PowerSamsaraDoomguyStrWeaponPower",1,"AltFireFinishReFire")
 		TNT1 A 0 A_JumpIfInventory("SamsaraHasPermaWeaponLevel2",1,"AltFireFinishReFire")
 		TNT1 A 0 A_CheckReload
-        TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringEndSoundPlayer")
+		TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringEndSoundPlayer")
 		goto Ready
 
 	AltFireFinishReFire:
 		TNT1 A 0 A_JumpIfInventory("DoomClassMode",2,"FireStrFinish")
 		TNT1 A 0 A_CheckReload
-        TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringEndSoundPlayer")
+		TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringEndSoundPlayer")
 		goto Ready
 
 	FlashStrPowered:
@@ -472,307 +462,307 @@ actor " Chaingun " : Weapon
 
 actor SamsaraDoomguyChaingunAttackHandler : Trigger
 {
-    States
-    {
-      // Ammo checking/taking stuff
-      Pickup:
-        TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupSound")
-        TNT1 A 0 A_JumpIfInventory("Clip",1,1)
-        stop
-        TNT1 A 0 A_TakeInventory("Clip",1)
-        goto PickupSound
+	States
+	{
+	// Ammo checking/taking stuff
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupSound")
+		TNT1 A 0 A_JumpIfInventory("Clip",1,1)
+		stop
+		TNT1 A 0 A_TakeInventory("Clip",1)
+		goto PickupSound
 
-      // Sound stuff
-      PickupSound:
-        TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",2,"PickupSoundPerkristan")
-        TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",1,"PickupSoundPSX")
-        TNT1 A 0 A_PlaySound("doomguy/chngun",CHAN_WEAPON)
-        goto PickupAttack
+	// Sound stuff
+	PickupSound:
+		TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",2,"PickupSoundPerkristan")
+		TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",1,"PickupSoundPSX")
+		TNT1 A 0 A_PlaySound("doomguy/chngun",CHAN_WEAPON)
+		goto PickupAttack
 
-      PickupSoundPSX:
-        TNT1 A 0 A_PlaySound("doom64guy/chngun",CHAN_WEAPON)
-        goto PickupAttack
+	PickupSoundPSX:
+		TNT1 A 0 A_PlaySound("doom64guy/chngun",CHAN_WEAPON)
+		goto PickupAttack
 
-      PickupSoundPerkristan:
-        TNT1 A 0 A_PlaySound("doomguy/perkristan/chngun",CHAN_WEAPON)
-        goto PickupAttack
+	PickupSoundPerkristan:
+		TNT1 A 0 A_PlaySound("doomguy/perkristan/chngun",CHAN_WEAPON)
+		goto PickupAttack
 
-      // Attack stuff
-      PickupAttack:
-        TNT1 A 0 A_JumpIfInventory("SamsaraImprovedDoomguyBalance",1,"PickupAttackImproved")
-      // Vanilla
-      PickupAttackVanilla:
-        TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackVanillaCoop")
-        TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackVanillaCoop")
-      PickupAttackVanillaDM:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,5,"DoomBulletPuffPlayerThruGhost",FBF_NOFLASH)
-        stop
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,5,"DoomBulletPuffPlayerThruGhost",FBF_NOFLASH)
-        stop
+	// Attack stuff
+	PickupAttack:
+		TNT1 A 0 A_JumpIfInventory("SamsaraImprovedDoomguyBalance",1,"PickupAttackImproved")
+	// Vanilla
+	PickupAttackVanilla:
+		TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackVanillaCoop")
+		TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackVanillaCoop")
+	PickupAttackVanillaDM:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,5,"DoomBulletPuffPlayerThruGhost",FBF_NOFLASH)
+		stop
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,5,"DoomBulletPuffPlayerThruGhost",FBF_NOFLASH)
+		stop
 
-      PickupAttackVanillaCoop:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,5,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NOFLASH)
-        stop
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,5,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NOFLASH)
-        stop
+	PickupAttackVanillaCoop:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,5,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NOFLASH)
+		stop
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,5,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NOFLASH)
+		stop
 
-      // Improved
-      PickupAttackImproved:
-        TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackImprovedCoop")
-        TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackImprovedCoop")
-      PickupAttackImprovedDM:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
-        stop
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
-        stop
+	// Improved
+	PickupAttackImproved:
+		TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackImprovedCoop")
+		TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackImprovedCoop")
+	PickupAttackImprovedDM:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
+		stop
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
+		stop
 
-      PickupAttackImprovedCoop:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
-        stop
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
-        stop
-    }
+	PickupAttackImprovedCoop:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
+		stop
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
+		stop
+	}
 }
 
 actor SamsaraDoomguy64ChaingunAttackHandler : Trigger
 {
-    States
-    {
-      // Ammo checking/taking stuff
-      Pickup:
-        TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupPlaySound")
-        TNT1 A 0 A_JumpIfInventory("Clip",1,1)
-        stop
-        TNT1 A 0 A_TakeInventory("Clip",1)
-        goto PickupPlaySound
+	States
+	{
+	// Ammo checking/taking stuff
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupPlaySound")
+		TNT1 A 0 A_JumpIfInventory("Clip",1,1)
+		stop
+		TNT1 A 0 A_TakeInventory("Clip",1)
+		goto PickupPlaySound
 
-      // Sound stuff
-      PickupPlaySound:
-        TNT1 A 0 A_JumpIfInventory("SamsaraDoom64ChaingunSoundChannelCount",0,"PickupPlaySound7")
-        TNT1 A 0 A_JumpIfInventory("SamsaraDoom64ChaingunSoundChannelCount",2,"PickupPlaySound6")
-        TNT1 A 0 A_JumpIfInventory("SamsaraDoom64ChaingunSoundChannelCount",1,"PickupPlaySound4")
-      PickupPlaySound1:
-        TNT1 A 0 A_PlaySound("doom64guy/chngun",CHAN_WEAPON)
-        TNT1 A 0 A_GiveInventory("SamsaraDoom64ChaingunSoundChannelCount")
-        goto PickupAttack
+	// Sound stuff
+	PickupPlaySound:
+		TNT1 A 0 A_JumpIfInventory("SamsaraDoom64ChaingunSoundChannelCount",0,"PickupPlaySound7")
+		TNT1 A 0 A_JumpIfInventory("SamsaraDoom64ChaingunSoundChannelCount",2,"PickupPlaySound6")
+		TNT1 A 0 A_JumpIfInventory("SamsaraDoom64ChaingunSoundChannelCount",1,"PickupPlaySound4")
+	PickupPlaySound1:
+		TNT1 A 0 A_PlaySound("doom64guy/chngun",CHAN_WEAPON)
+		TNT1 A 0 A_GiveInventory("SamsaraDoom64ChaingunSoundChannelCount")
+		goto PickupAttack
 
-      PickupPlaySound4:
-        TNT1 A 0 A_PlaySound("doom64guy/chngun")
-        TNT1 A 0 A_GiveInventory("SamsaraDoom64ChaingunSoundChannelCount")
-        goto PickupAttack
+	PickupPlaySound4:
+		TNT1 A 0 A_PlaySound("doom64guy/chngun")
+		TNT1 A 0 A_GiveInventory("SamsaraDoom64ChaingunSoundChannelCount")
+		goto PickupAttack
 
-      PickupPlaySound6:
-        TNT1 A 0 A_PlaySound("doom64guy/chngun",CHAN_6)
-        TNT1 A 0 A_GiveInventory("SamsaraDoom64ChaingunSoundChannelCount")
-        goto PickupAttack
+	PickupPlaySound6:
+		TNT1 A 0 A_PlaySound("doom64guy/chngun",CHAN_6)
+		TNT1 A 0 A_GiveInventory("SamsaraDoom64ChaingunSoundChannelCount")
+		goto PickupAttack
 
-      PickupPlaySound7:
-        TNT1 A 0 A_PlaySound("doom64guy/chngun",CHAN_7)
-        TNT1 A 0 A_TakeInventory("SamsaraDoom64ChaingunSoundChannelCount")
-        goto PickupAttack
+	PickupPlaySound7:
+		TNT1 A 0 A_PlaySound("doom64guy/chngun",CHAN_7)
+		TNT1 A 0 A_TakeInventory("SamsaraDoom64ChaingunSoundChannelCount")
+		goto PickupAttack
 
-      // Attack stuff
-      PickupAttack:
-        TNT1 A 0 A_JumpIfInventory("SamsaraImprovedDoomguyBalance",1,"PickupAttackImproved")
-      // Vanilla
-      PickupAttackVanilla:
-        TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackVanillaCoop")
-        TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackVanillaCoop")
-      PickupAttackVanillaDM:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,random(1,4)*4,"Doom64BulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
-        goto PickupFinish
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,random(1,4)*4,"Doom64BulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
-        goto PickupFinish
+	// Attack stuff
+	PickupAttack:
+		TNT1 A 0 A_JumpIfInventory("SamsaraImprovedDoomguyBalance",1,"PickupAttackImproved")
+	// Vanilla
+	PickupAttackVanilla:
+		TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackVanillaCoop")
+		TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackVanillaCoop")
+	PickupAttackVanillaDM:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,random(1,4)*4,"Doom64BulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
+		goto PickupFinish
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,random(1,4)*4,"Doom64BulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
+		goto PickupFinish
 
-      PickupAttackVanillaCoop:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,random(1,4)*4,"Doom64BulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
-        goto PickupFinish
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,random(1,4)*4,"Doom64BulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
-        goto PickupFinish
+	PickupAttackVanillaCoop:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,random(1,4)*4,"Doom64BulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
+		goto PickupFinish
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,random(1,4)*4,"Doom64BulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
+		goto PickupFinish
 
-      // Improved
-      PickupAttackImproved:
-        TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackImprovedCoop")
-        TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackImprovedCoop")
-      PickupAttackImprovedDM:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,random(6,9)*2,"Doom64BulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
-        goto PickupFinish
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,random(6,9)*2,"Doom64BulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
-        goto PickupFinish
+	// Improved
+	PickupAttackImproved:
+		TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackImprovedCoop")
+		TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackImprovedCoop")
+	PickupAttackImprovedDM:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,random(6,9)*2,"Doom64BulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
+		goto PickupFinish
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,random(6,9)*2,"Doom64BulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
+		goto PickupFinish
 
-      PickupAttackImprovedCoop:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,random(6,9)*2,"Doom64BulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
-        goto PickupFinish
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,random(6,9)*2,"Doom64BulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
-        goto PickupFinish
+	PickupAttackImprovedCoop:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,random(6,9)*2,"Doom64BulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
+		goto PickupFinish
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,random(6,9)*2,"Doom64BulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
+		goto PickupFinish
 
-      // Finishing stuff
-      PickupFinish:
-        TNT1 A 0 ACS_NamedExecuteAlways("SamsaraRecoil", 0, 1, 0, 5)
-        stop
-    }
+	// Finishing stuff
+	PickupFinish:
+		TNT1 A 0 ACS_NamedExecuteAlways("SamsaraRecoil", 0, 1, 0, 5)
+		stop
+	}
 }
 
 // Unpowered attack handler
 
 actor SamsaraDoomguyStrChaingunAttackHandler : Trigger
 {
-    States
-    {
-      // Ammo checking/taking stuff
-      Pickup:
-        TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupSound")
-        TNT1 A 0 A_JumpIfInventory("Clip",1,1)
-        stop
-        TNT1 A 0 A_TakeInventory("Clip",1)
-        goto PickupSound
+	States
+	{
+	// Ammo checking/taking stuff
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupSound")
+		TNT1 A 0 A_JumpIfInventory("Clip",1,1)
+		stop
+		TNT1 A 0 A_TakeInventory("Clip",1)
+		goto PickupSound
 
-      // Sound stuff
-      PickupSound:
-        TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",1,"PickupSoundDE")
-        TNT1 A 0 A_PlaySound("doomguy/stronghold/chnglp",CHAN_WEAPON,1,true)
-        TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
-        goto PickupAttack
+	// Sound stuff
+	PickupSound:
+		TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",1,"PickupSoundDE")
+		TNT1 A 0 A_PlaySound("doomguy/stronghold/chnglp",CHAN_WEAPON,1,true)
+		TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
+		goto PickupAttack
 
-      PickupSoundDE:
-        TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundStopper")
-        TNT1 A 0 A_PlaySound("doomguy/demoneclipse/chngun",CHAN_WEAPON)
-        goto PickupAttack
+	PickupSoundDE:
+		TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundStopper")
+		TNT1 A 0 A_PlaySound("doomguy/demoneclipse/chngun",CHAN_WEAPON)
+		goto PickupAttack
 
-      // Attack stuff
-      PickupAttack:
-        TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackCoop")
-        TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackCoop")
-      PickupAttackDM:
-        TNT1 A 0 A_FireBullets(4,2.3,1,5,"SamsaraDoomguyStrBulletPuffBallisticThruGhost",FBF_NOFLASH)
-        stop
+	// Attack stuff
+	PickupAttack:
+		TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackCoop")
+		TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackCoop")
+	PickupAttackDM:
+		TNT1 A 0 A_FireBullets(4,2.3,1,5,"SamsaraDoomguyStrBulletPuffBallisticThruGhost",FBF_NOFLASH)
+		stop
 
-      PickupAttackCoop:
-        TNT1 A 0 A_FireBullets(4,2.3,1,5,"SamsaraDoomguyStrBulletPuffBallisticThruGhostCoop",FBF_NOFLASH)
-        stop
-    }
+	PickupAttackCoop:
+		TNT1 A 0 A_FireBullets(4,2.3,1,5,"SamsaraDoomguyStrBulletPuffBallisticThruGhostCoop",FBF_NOFLASH)
+		stop
+	}
 }
 
 actor SamsaraDoomguyStrChaingunFiringEndSoundPlayer : Trigger
 {
-    States
-    {
-      // Sound playing stuff
-      Pickup:
-        TNT1 A 0 A_JumpIfInventory("SamsaraDoomguyStrChaingunFiringSoundCheck",1,1)
-        stop
-        TNT1 A 0 A_PlaySound("doomguy/stronghold/chngdn",CHAN_WEAPON)
-        TNT1 A 0 A_TakeInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
-        stop
-    }
+	States
+	{
+	// Sound playing stuff
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("SamsaraDoomguyStrChaingunFiringSoundCheck",1,1)
+		stop
+		TNT1 A 0 A_PlaySound("doomguy/stronghold/chngdn",CHAN_WEAPON)
+		TNT1 A 0 A_TakeInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
+		stop
+	}
 }
 
 actor SamsaraDoomguyStrChaingunFiringSoundStopper : Trigger
 {
-    States
-    {
-      // Sound stopping stuff
-      Pickup:
-        TNT1 A 0 A_JumpIfInventory("SamsaraDoomguyStrChaingunFiringSoundCheck",1,1)
-        stop
-        TNT1 A 0 A_PlaySound("silence",CHAN_WEAPON)
-        TNT1 A 0 A_StopSound(CHAN_WEAPON)
-        TNT1 A 0 A_TakeInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
-        stop
-    }
+	States
+	{
+	// Sound stopping stuff
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("SamsaraDoomguyStrChaingunFiringSoundCheck",1,1)
+		stop
+		TNT1 A 0 A_PlaySound("silence",CHAN_WEAPON)
+		TNT1 A 0 A_StopSound(CHAN_WEAPON)
+		TNT1 A 0 A_TakeInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
+		stop
+	}
 }
 
 // Powered attack handlers
 
 actor SamsaraDoomguyStrChaingunPoweredPrimaryAttackHandler : Trigger
 {
-    States
-    {
-      // Ammo checking/taking stuff
-      Pickup:
-        TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupAttack")
-        TNT1 A 0 A_JumpIfInventory("Clip",1,1)
-        stop
-        TNT1 A 0 A_JumpIfInventory("SamsaraTakingAmmo",1,1)
-        goto PickupAttack
-        TNT1 A 0 A_TakeInventory("Clip",1)
-        goto PickupAttack
+	States
+	{
+	// Ammo checking/taking stuff
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupAttack")
+		TNT1 A 0 A_JumpIfInventory("Clip",1,1)
+		stop
+		TNT1 A 0 A_JumpIfInventory("SamsaraTakingAmmo",1,1)
+		goto PickupAttack
+		TNT1 A 0 A_TakeInventory("Clip",1)
+		goto PickupAttack
 
-      // Attack stuff
-      PickupAttack:
-        TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",1,"PickupAttackDE")
-      PickupAttackStr:
-        TNT1 A 0 A_PlaySound("doomguy/stronghold/chnglp",CHAN_WEAPON,1,true)
-        TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
-        TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackStrCoop")
-        TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackStrCoop")
-      PickupAttackStrDM:
-        TNT1 A 0 A_FireBullets(0.75,0.75,-1,20,"SamsaraDoomguyStrElectricalPuff",FBF_NOFLASH)
-        stop
+	// Attack stuff
+	PickupAttack:
+		TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",1,"PickupAttackDE")
+	PickupAttackStr:
+		TNT1 A 0 A_PlaySound("doomguy/stronghold/chnglp",CHAN_WEAPON,1,true)
+		TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
+		TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackStrCoop")
+		TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackStrCoop")
+	PickupAttackStrDM:
+		TNT1 A 0 A_FireBullets(0.75,0.75,-1,20,"SamsaraDoomguyStrElectricalPuff",FBF_NOFLASH)
+		stop
 
-      PickupAttackStrCoop:
-        TNT1 A 0 A_FireBullets(0.75,0.75,-1,20,"SamsaraDoomguyStrElectricalPuffCoop",FBF_NOFLASH)
-        stop
+	PickupAttackStrCoop:
+		TNT1 A 0 A_FireBullets(0.75,0.75,-1,20,"SamsaraDoomguyStrElectricalPuffCoop",FBF_NOFLASH)
+		stop
 
-      PickupAttackDE:
-        TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundStopper")
-        TNT1 A 0 A_PlaySound("doomguy/demoneclipse/chngun",CHAN_WEAPON)
-        TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackDECoop")
-        TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackDECoop")
-      PickupAttackDEDM:
-        TNT1 A 0 A_FireBullets(0.75,0.75,-1,20,"SamsaraDoomguyStrElectricalPuffSoundDE",FBF_NOFLASH)
-        stop
+	PickupAttackDE:
+		TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundStopper")
+		TNT1 A 0 A_PlaySound("doomguy/demoneclipse/chngun",CHAN_WEAPON)
+		TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackDECoop")
+		TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackDECoop")
+	PickupAttackDEDM:
+		TNT1 A 0 A_FireBullets(0.75,0.75,-1,20,"SamsaraDoomguyStrElectricalPuffSoundDE",FBF_NOFLASH)
+		stop
 
-      PickupAttackDECoop:
-        TNT1 A 0 A_FireBullets(0.75,0.75,-1,20,"SamsaraDoomguyStrElectricalPuffCoopSoundDE",FBF_NOFLASH)
-        stop
-    }
+	PickupAttackDECoop:
+		TNT1 A 0 A_FireBullets(0.75,0.75,-1,20,"SamsaraDoomguyStrElectricalPuffCoopSoundDE",FBF_NOFLASH)
+		stop
+	}
 }
 
 actor SamsaraDoomguyStrChaingunPoweredSecondaryAttackHandler : Trigger
 {
-    States
-    {
-      // Ammo checking/taking stuff
-      Pickup:
-        TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupSound")
-        TNT1 A 0 A_JumpIfInventory("Clip",1,1)
-        stop
-        TNT1 A 0 A_TakeInventory("Clip",1)
-        goto PickupSound
+	States
+	{
+	// Ammo checking/taking stuff
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupSound")
+		TNT1 A 0 A_JumpIfInventory("Clip",1,1)
+		stop
+		TNT1 A 0 A_TakeInventory("Clip",1)
+		goto PickupSound
 
-      // Sound stuff
-      PickupSound:
-        TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",1,"PickupSoundDE")
-        TNT1 A 0 A_PlaySound("doomguy/stronghold/chnglp",CHAN_WEAPON,1,true)
-        TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
-        goto PickupAttack
+	// Sound stuff
+	PickupSound:
+		TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",1,"PickupSoundDE")
+		TNT1 A 0 A_PlaySound("doomguy/stronghold/chnglp",CHAN_WEAPON,1,true)
+		TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundCheck")
+		goto PickupAttack
 
-      PickupSoundDE:
-        TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundStopper")
-        TNT1 A 0 A_PlaySound("doomguy/demoneclipse/chngun",CHAN_WEAPON)
-        goto PickupAttack
+	PickupSoundDE:
+		TNT1 A 0 A_GiveInventory("SamsaraDoomguyStrChaingunFiringSoundStopper")
+		TNT1 A 0 A_PlaySound("doomguy/demoneclipse/chngun",CHAN_WEAPON)
+		goto PickupAttack
 
-      // Attack stuff
-      PickupAttack:
-        TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackCoop")
-        TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackCoop")
-      PickupAttackDM:
-        TNT1 A 0 A_FireBullets(7.5,3,-1,16,"SamsaraDoomguyStrRepPuffNoDamage",FBF_NOFLASH)
-        stop
+	// Attack stuff
+	PickupAttack:
+		TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackCoop")
+		TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackCoop")
+	PickupAttackDM:
+		TNT1 A 0 A_FireBullets(7.5,3,-1,16,"SamsaraDoomguyStrRepPuffNoDamage",FBF_NOFLASH)
+		stop
 
-      PickupAttackCoop:
-        TNT1 A 0 A_FireBullets(7.5,3,-1,16,"SamsaraDoomguyStrRepPuffNoDamageCoop",FBF_NOFLASH)
-        stop
-    }
+	PickupAttackCoop:
+		TNT1 A 0 A_FireBullets(7.5,3,-1,16,"SamsaraDoomguyStrRepPuffNoDamageCoop",FBF_NOFLASH)
+		stop
+	}
 }
 
 // Machine Gun
@@ -813,8 +803,8 @@ actor " Machine Gun " : Weapon
 		TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,2)
 		TNT1 A 0 A_JumpIfInventory("Clip",1,1)
 		goto Fire2
-        TNT1 A 0 A_GunFlash
-        goto Fire2
+		TNT1 A 0 A_GunFlash
+		goto Fire2
 
 	Fire2:
 		DMCG A 4 Bright A_GiveInventory("SamsaraDoomguyMachineGunAttackHandler")
@@ -830,68 +820,68 @@ actor " Machine Gun " : Weapon
 
 actor SamsaraDoomguyMachineGunAttackHandler : Trigger
 {
-    States
-    {
-      // Ammo checking/taking stuff
-      Pickup:
-        TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupSound")
-        TNT1 A 0 A_JumpIfInventory("Clip",1,1)
-        stop
-        TNT1 A 0 A_TakeInventory("Clip",1)
-        goto PickupSound
+	States
+	{
+	// Ammo checking/taking stuff
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("SamsaraHasInfiniteAmmo",1,"PickupSound")
+		TNT1 A 0 A_JumpIfInventory("Clip",1,1)
+		stop
+		TNT1 A 0 A_TakeInventory("Clip",1)
+		goto PickupSound
 
-      // Sound stuff
-      PickupSound:
-        TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",2,"PickupSoundPerkristan")
-        TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",1,"PickupSoundPSX")
-        TNT1 A 0 A_PlaySound("doomguy/mchgun",CHAN_WEAPON)
-        goto PickupAttack
+	// Sound stuff
+	PickupSound:
+		TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",2,"PickupSoundPerkristan")
+		TNT1 A 0 A_JumpIfInventory("SamsaraAlternateSoundToken",1,"PickupSoundPSX")
+		TNT1 A 0 A_PlaySound("doomguy/mchgun",CHAN_WEAPON)
+		goto PickupAttack
 
-      PickupSoundPSX:
-        TNT1 A 0 A_PlaySound("doom64guy/mchgun",CHAN_WEAPON)
-        goto PickupAttack
+	PickupSoundPSX:
+		TNT1 A 0 A_PlaySound("doom64guy/mchgun",CHAN_WEAPON)
+		goto PickupAttack
 
-      PickupSoundPerkristan:
-        TNT1 A 0 A_PlaySound("doomguy/perkristan/mchgun",CHAN_WEAPON)
-        goto PickupAttack
+	PickupSoundPerkristan:
+		TNT1 A 0 A_PlaySound("doomguy/perkristan/mchgun",CHAN_WEAPON)
+		goto PickupAttack
 
-      // Attack stuff
-      PickupAttack:
-        TNT1 A 0 A_JumpIfInventory("SamsaraImprovedDoomguyBalance",1,"PickupAttackImproved")
-      // Vanilla
-      PickupAttackVanilla:
-        TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackVanillaCoop")
-        TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackVanillaCoop")
-      PickupAttackVanillaDM:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,5,"DoomBulletPuffPlayerThruGhost",FBF_NOFLASH)
-        stop
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,5,"DoomBulletPuffPlayerThruGhost",FBF_NOFLASH)
-        stop
+	// Attack stuff
+	PickupAttack:
+		TNT1 A 0 A_JumpIfInventory("SamsaraImprovedDoomguyBalance",1,"PickupAttackImproved")
+	// Vanilla
+	PickupAttackVanilla:
+		TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackVanillaCoop")
+		TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackVanillaCoop")
+	PickupAttackVanillaDM:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,5,"DoomBulletPuffPlayerThruGhost",FBF_NOFLASH)
+		stop
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,5,"DoomBulletPuffPlayerThruGhost",FBF_NOFLASH)
+		stop
 
-      PickupAttackVanillaCoop:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,5,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NOFLASH)
-        stop
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,5,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NOFLASH)
-        stop
+	PickupAttackVanillaCoop:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,5,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NOFLASH)
+		stop
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,5,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NOFLASH)
+		stop
 
-      // Improved
-      PickupAttackImproved:
-        TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackImprovedCoop")
-        TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackImprovedCoop")
-      PickupAttackImprovedDM:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
-        stop
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
-        stop
+	// Improved
+	PickupAttackImproved:
+		TNT1 A 0 A_JumpIfInventory("SPModeOn",1,"PickupAttackImprovedCoop")
+		TNT1 A 0 A_JumpIfInventory("CoopModeOn",1,"PickupAttackImprovedCoop")
+	PickupAttackImprovedDM:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
+		stop
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost",FBF_NORANDOM|FBF_NOFLASH)
+		stop
 
-      PickupAttackImprovedCoop:
-        TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
-        TNT1 A 0 A_FireBullets(5.6,0,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
-        stop
-        TNT1 A 0 A_FireBullets(5.6,3.5,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
-        stop
-    }
+	PickupAttackImprovedCoop:
+		TNT1 A 0 A_JumpIfInventory("SamsaraUsingVerticalSpread",1,2)
+		TNT1 A 0 A_FireBullets(5.6,0,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
+		stop
+		TNT1 A 0 A_FireBullets(5.6,3.5,1,random(8,10)*2,"DoomBulletPuffPlayerThruGhost_Coop",FBF_NORANDOM|FBF_NOFLASH)
+		stop
+	}
 }
